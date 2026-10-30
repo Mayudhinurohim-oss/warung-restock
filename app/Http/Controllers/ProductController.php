@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Supplier;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -12,12 +13,17 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-  public function index()
+  public function index(Request $request)
 {
-    $products = Product::with('category')
+    $query = Product::with(['category', 'supplier'])
         ->orderBy('category_id')
-        ->orderBy('name')
-        ->get();
+        ->orderBy('name');
+
+    if ($request->filled('supplier')) {
+        $query->where('supplier_id', $request->supplier);
+    }
+
+    $products = $query->get();
 
     $categories = Category::with([
         'products' => function ($query) {
@@ -25,9 +31,16 @@ class ProductController extends Controller
         }
     ])->withCount('products')->get();
 
+    $supplier = null;
+
+    if ($request->filled('supplier')) {
+        $supplier = Supplier::find($request->supplier);
+    }
+
     return view('products.index', compact(
         'products',
-        'categories'
+        'categories',
+        'supplier'
     ));
 }
 
@@ -37,8 +50,9 @@ class ProductController extends Controller
     public function create()
 {
     $categories = Category::all();
+$suppliers = Supplier::all();
 
-    return view('products.create', compact('categories'));
+return view('products.create', compact('categories', 'suppliers'));
 }
 
     /**
@@ -48,6 +62,7 @@ class ProductController extends Controller
 {
     $request->validate([
         'category_id' => 'required',
+        'supplier_id' => 'nullable|exists:suppliers,id',
         'name'        => 'required',
         'stock'       => 'required|numeric',
         'unit'        => 'required',
@@ -64,6 +79,7 @@ class ProductController extends Controller
 
     Product::create([
         'category_id' => $request->category_id,
+        'supplier_id' => $request->supplier_id,
         'name'        => $request->name,
         'stock'       => $request->stock,
         'unit'        => $request->unit,
@@ -89,9 +105,14 @@ class ProductController extends Controller
     public function edit(string $id)
 {
     $product = Product::findOrFail($id);
-    $categories = Category::all();
+$categories = Category::all();
+$suppliers = Supplier::all();
 
-    return view('products.edit', compact('product', 'categories'));
+return view('products.edit', compact(
+    'product',
+    'categories',
+    'suppliers'
+));
 }
 
     /**
@@ -101,6 +122,7 @@ class ProductController extends Controller
 {
     $request->validate([
         'category_id' => 'required',
+        'supplier_id' => 'nullable|exists:suppliers,id',
         'name'        => 'required',
         'stock'       => 'required|numeric',
         'unit'        => 'required',
@@ -123,6 +145,7 @@ class ProductController extends Controller
     }
 
     $product->category_id = $request->category_id;
+    $product->supplier_id = $request->supplier_id;
     $product->name        = $request->name;
     $product->stock       = $request->stock;
     $product->unit        = $request->unit;

@@ -277,12 +277,11 @@
     <span>Produk</span>
 </a>
 
-                <a href="#"
-                   class="sidebar-link">
-                    <i class="bi bi-truck"></i>
-                    <span>Supplier</span>
-                </a>
-            </nav>
+                <a href="{{ route('suppliers.index') }}"
+   class="sidebar-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}">
+    <i class="bi bi-truck"></i>
+    <span>Supplier</span>
+</a>
 
             <div class="menu-title">
     Transaksi

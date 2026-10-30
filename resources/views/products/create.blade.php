@@ -15,36 +15,36 @@
     </div>
 
     <div class="card border-0 shadow-lg"
-        style="
-        background: rgba(255,255,255,.90);
-        border-radius:20px;
-        ">
+        style="background: rgba(255,255,255,.90); border-radius:20px;">
 
         <div class="card-body p-4">
 
             <form method="POST"
-      action="{{ route('products.store') }}"
-      enctype="multipart/form-data">
+                  action="{{ route('products.store') }}"
+                  enctype="multipart/form-data">
 
                 @csrf
 
+                <!-- Foto -->
                 <div class="mb-3">
 
-    <label class="form-label">
-        Foto Produk
-    </label>
+                    <label class="form-label fw-bold">
+                        Foto Produk
+                    </label>
 
-    <input
-        type="file"
-        name="foto"
-        class="form-control"
-        accept="image/*">
+                    <input
+                        type="file"
+                        name="foto"
+                        class="form-control"
+                        accept="image/*">
 
-</div>
+                </div>
 
                 <div class="row">
 
+                    <!-- Nama Produk -->
                     <div class="col-md-6 mb-3">
+
                         <label class="form-label fw-bold">
                             Nama Produk
                         </label>
@@ -54,10 +54,14 @@
                             name="name"
                             class="form-control"
                             placeholder="Masukkan nama produk"
+                            value="{{ old('name') }}"
                             required>
+
                     </div>
 
+                    <!-- Kategori -->
                     <div class="col-md-6 mb-3">
+
                         <label class="form-label fw-bold">
                             Kategori
                         </label>
@@ -73,8 +77,12 @@
 
                             @foreach($categories as $category)
 
-                                <option value="{{ $category->id }}">
+                                <option
+                                    value="{{ $category->id }}"
+                                    {{ old('category_id') == $category->id ? 'selected' : '' }}>
+
                                     {{ $category->nama }}
+
                                 </option>
 
                             @endforeach
@@ -83,7 +91,40 @@
 
                     </div>
 
+                    <!-- Supplier -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label fw-bold">
+                            Supplier
+                        </label>
+
+                        <select
+                            name="supplier_id"
+                            class="form-select">
+
+                            <option value="">
+                                -- Pilih Supplier --
+                            </option>
+
+                            @foreach($suppliers as $supplier)
+
+                                <option
+                                    value="{{ $supplier->id }}"
+                                    {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+
+                                    {{ $supplier->nama_supplier }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    <!-- Stok -->
                     <div class="col-md-4 mb-3">
+
                         <label class="form-label fw-bold">
                             Stok
                         </label>
@@ -92,11 +133,14 @@
                             type="number"
                             name="stock"
                             class="form-control"
-                            value="0"
+                            value="{{ old('stock',0) }}"
                             required>
+
                     </div>
 
+                    <!-- Satuan -->
                     <div class="col-md-4 mb-3">
+
                         <label class="form-label fw-bold">
                             Satuan
                         </label>
@@ -106,10 +150,14 @@
                             name="unit"
                             class="form-control"
                             placeholder="pcs / dus / botol"
+                            value="{{ old('unit') }}"
                             required>
+
                     </div>
 
+                    <!-- Minimum Stok -->
                     <div class="col-md-4 mb-3">
+
                         <label class="form-label fw-bold">
                             Minimum Stok
                         </label>
@@ -118,50 +166,9 @@
                             type="number"
                             name="min_stock"
                             class="form-control"
-                            value="0"
+                            value="{{ old('min_stock',0) }}"
                             required>
+
                     </div>
 
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label fw-bold">
-                            Harga
-                        </label>
-
-                        <input
-                            type="number"
-                            name="price"
-                            class="form-control"
-                            placeholder="Contoh: 3500"
-                            required>
-                    </div>
-
-                </div>
-
-                <div class="d-flex justify-content-end gap-2">
-
-                    <a href="{{ route('products.index') }}"
-                        class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i>
-                        Kembali
-                    </a>
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary">
-
-                        <i class="bi bi-check-circle"></i>
-                        Simpan Product
-
-                    </button>
-
-                </div>
-
-            </form>
-
-        </div>
-
-    </div>
-
-</div>
-
-@endsection
+                    <!-- Harga

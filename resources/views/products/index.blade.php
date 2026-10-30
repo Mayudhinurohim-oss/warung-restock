@@ -114,6 +114,8 @@
 
                     <th width="60">No</th>
 
+                    <th>Supplier</th>
+
                     <th>Produk</th>
 
                     <th>Kategori</th>
@@ -190,6 +192,28 @@
         </span>
 
     </td>
+
+    <td>
+
+    @if($product->supplier)
+
+        <span class="badge bg-info text-dark">
+
+            {{ $product->supplier->nama_supplier }}
+
+        </span>
+
+    @else
+
+        <span class="text-muted">
+
+            -
+
+        </span>
+
+    @endif
+
+</td>
 
     <!-- Stok -->
     <td>
