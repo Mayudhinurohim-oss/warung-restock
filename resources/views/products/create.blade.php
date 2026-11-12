@@ -171,4 +171,52 @@
 
                     </div>
 
-                    <!-- Harga
+                    <!-- Harga -->
+<div class="col-md-6 mb-4">
+
+    <label class="form-label fw-bold">
+        Harga
+    </label>
+
+    <input
+        type="number"
+        name="price"
+        class="form-control"
+        value="{{ old('price') }}"
+        placeholder="Contoh: 3500"
+        required>
+
+</div>
+
+</div>
+
+<div class="d-flex justify-content-end gap-2">
+
+    <a href="{{ route('products.index') }}"
+       class="btn btn-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+        Kembali
+
+    </a>
+
+    <button
+        type="submit"
+        class="btn btn-primary">
+
+        <i class="bi bi-save"></i>
+        Simpan Produk
+
+    </button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+@endsection
